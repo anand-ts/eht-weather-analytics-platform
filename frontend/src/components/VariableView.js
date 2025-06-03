@@ -1065,6 +1065,18 @@ function VariableView() {
                         color: `${isDarkMode ? '#6b7280' : '#4b5563'} !important`,
                       },
                     },
+                    '&[data-selected]': {
+                      backgroundColor: `${isDarkMode ? '#2563eb' : '#3b82f6'} !important`,
+                      color: '#ffffff !important',
+                    },
+                    '&[data-in-range]': {
+                      backgroundColor: `${isDarkMode ? '#475569' : '#bfdbfe'} !important`,
+                      color: `${isDarkMode ? '#e2e8f0' : '#1e40af'} !important`,
+                    },
+                    '&[data-first-in-range], &[data-last-in-range]': {
+                      backgroundColor: `${isDarkMode ? '#1d4ed8' : '#3b82f6'} !important`,
+                      color: '#ffffff !important',
+                    },
                   },
                   weekday: {
                     color: isDarkMode ? '#d1d5db' : undefined,
@@ -1076,14 +1088,14 @@ function VariableView() {
                     color: isDarkMode ? '#e5e7eb' : undefined,
                     '&:hover': {
                       backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
-                      color: isDarkMode ? '#f3f4f6' : undefined,
+                      color: isDarkMode ? '#f3f4f6' : '#374151',
                     },
                   },
                   calendarHeaderLevel: {
                     color: isDarkMode ? '#f3f4f6' : undefined,
                     '&:hover': {
                       backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
-                      color: isDarkMode ? '#ffffff' : undefined,
+                      color: isDarkMode ? '#ffffff' : '#374151',
                     },
                   }
                 }}
