@@ -17,7 +17,7 @@ import blackHoleLogo from '../assets/black_hole.jpg';
 import { ArrowLeftIcon, SunIcon, MoonIcon, DownloadIcon, RefreshIcon, ArrowsExpandIcon, XIcon } from '@heroicons/react/solid';
 
 // Add these imports at the top
-import { linearInterpolation, detectAnomalies } from '../utils/dataProcessing';
+import { linearInterpolation } from '../utils/dataProcessing';
 
 // Register Zoom Plugin
 Chart.register(Zoom);
@@ -51,7 +51,7 @@ function VariableView() {
     return localStorage.getItem('variableView_showOnlyMovingAverage') === 'true';
   });
 
-  // New state variables for statistics
+  // New state variables for statisticsd 
   const [showStatistics, setShowStatistics] = useState(() => {
     return localStorage.getItem('variableView_showStatistics') === 'true';
   });
@@ -59,18 +59,9 @@ function VariableView() {
     return localStorage.getItem('variableView_showCorrelation') === 'true';
   });
 
-  // Add new state variables for interpolation and anomaly detection
+  // Add new state variables for interpolation
   const [interpolationMethod, setInterpolationMethod] = useState(() => {
     return localStorage.getItem('variableView_interpolationMethod') || 'none';
-  });
-
-  const [anomalyDetection, setAnomalyDetection] = useState(() => {
-    return localStorage.getItem('variableView_anomalyDetection') === 'true';
-  });
-
-  const [anomalyThreshold, setAnomalyThreshold] = useState(() => {
-    const saved = localStorage.getItem('variableView_anomalyThreshold');
-    return saved ? parseFloat(saved) : 3.0;
   });
 
   // Save cached data in state
@@ -131,14 +122,6 @@ function VariableView() {
   useEffect(() => {
     localStorage.setItem('variableView_interpolationMethod', interpolationMethod);
   }, [interpolationMethod]);
-
-  useEffect(() => {
-    localStorage.setItem('variableView_anomalyDetection', anomalyDetection);
-  }, [anomalyDetection]);
-
-  useEffect(() => {
-    localStorage.setItem('variableView_anomalyThreshold', anomalyThreshold);
-  }, [anomalyThreshold]);
 
   useEffect(() => {
     localStorage.setItem('variableView_dateRange', JSON.stringify(dateRange));
@@ -314,16 +297,10 @@ function VariableView() {
         processedValues = linearInterpolation(values);
       }
 
-      // Detect anomalies if enabled
-      let anomalies = [];
-      if (anomalyDetection) {
-        anomalies = detectAnomalies(processedValues, anomalyThreshold);
-      }
-
       // Get variable color
       const baseColor = getColor(index);
 
-      // Create dataset with enhanced point styling for anomalies
+      // Create dataset
       const dataset = {
         label: variables.find((v) => v.value === variable).label,
         data: processedValues,
@@ -331,29 +308,11 @@ function VariableView() {
         backgroundColor: baseColor,
         borderColor: baseColor,
         borderWidth: 1,
-        pointRadius: (ctx) => {
-          // Make anomalies have larger points
-          if (anomalyDetection && anomalies[ctx.dataIndex]) return 6;
-          return 1;
-        },
-        pointBackgroundColor: (ctx) => {
-          return baseColor;
-        },
-        pointBorderColor: (ctx) => {
-          // Add black border to anomaly points for better visibility
-          if (anomalyDetection && anomalies[ctx.dataIndex]) return 'black';
-          return baseColor;
-        },
-        pointBorderWidth: (ctx) => {
-          // Thicker border for anomaly points
-          if (anomalyDetection && anomalies[ctx.dataIndex]) return 2;
-          return 1;
-        },
-        pointStyle: (ctx) => {
-          // Use triangles for anomalies
-          if (anomalyDetection && anomalies[ctx.dataIndex]) return 'triangle';
-          return 'circle';
-        },
+        pointRadius: 1,
+        pointBackgroundColor: baseColor,
+        pointBorderColor: baseColor,
+        pointBorderWidth: 1,
+        pointStyle: 'circle',
         pointHoverRadius: 8,
         tension: 0.1,
         spanGaps: interpolationMethod === 'none',
@@ -595,49 +554,6 @@ function VariableView() {
               })}
             </tbody>
           </table>
-        </div>
-      </div>
-    );
-  };
-
-  const AnomalyColorLegend = () => {
-    if (!anomalyDetection || selectedVariables.length === 0) return null;
-
-    return (
-      <div className="mt-4 bg-white dark:bg-gray-800 p-4 rounded shadow transition-colors duration-300">
-        <h3 className="text-lg font-semibold mb-2">Anomaly Legend</h3>
-        <div className="flex flex-wrap gap-4">
-          {selectedVariables.map((variable, index) => {
-            const variableColor = getColor(index);
-            const variableLabel = variables.find(v => v.value === variable).label;
-
-            return (
-              <div key={variable} className="flex items-center">
-                <div
-                  className="flex items-center justify-center mr-2"
-                  style={{
-                    width: '20px',
-                    height: '20px'
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '0',
-                      height: '0',
-                      borderLeft: '6px solid transparent',
-                      borderRight: '6px solid transparent',
-                      borderBottom: `12px solid ${variableColor}`,
-                      borderTop: '0px',
-                      outline: '1px solid black'
-                    }}
-                  />
-                </div>
-                <span className="text-sm">
-                  {variableLabel} Anomalies
-                </span>
-              </div>
-            );
-          })}
         </div>
       </div>
     );
@@ -1096,79 +1012,102 @@ function VariableView() {
             </div>
           </div>
 
-          {/* Add Anomaly Detection Controls */}
-          <div className="mt-6">
-            <h3 className="text-lg font-semibold mb-2">Anomaly Detection</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="anomaly-detection"
-                  checked={anomalyDetection}
-                  onChange={() => setAnomalyDetection(!anomalyDetection)}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <label htmlFor="anomaly-detection" className="text-gray-700 dark:text-gray-300">
-                  Highlight anomalies
-                </label>
-              </div>
-
-              {anomalyDetection && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Threshold (Z-score):
-                  </label>
-                  <input
-                    type="number"
-                    value={anomalyThreshold}
-                    onChange={(e) => {
-                      const value = parseFloat(e.target.value);
-                      if (!isNaN(value) && value > 0) {
-                        setAnomalyThreshold(value);
-                      }
-                    }}
-                    className="mt-1 block w-24 border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-indigo-500 focus:border-indigo-500"
-                    min="0.5"
-                    step="0.1"
-                  />
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Lower values detect more anomalies
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* Date range picker */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-2">Select Date Range</h3>
-            <DatePicker
-              type="range"
-              value={dateRange}
-              onChange={setDateRange}
-              clearable
-              withTime
-              valueFormat="YYYY-MM-DD HH:mm:ss"
-            />
-            <button
-              onClick={() => {
-                if (dateRange[0] && dateRange[1]) {
-                  getWeatherData({
-                    variables: {
-                      collection: selectedCollection,
-                      limit: 10000,
-                      startDate: format(dateRange[0], 'yyyy-MM-dd HH:mm:ss'),
-                      endDate:   format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'),
+            <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+              <DatePicker
+                type="range"
+                value={dateRange}
+                onChange={setDateRange}
+                clearable
+                withTime
+                valueFormat="YYYY-MM-DD HH:mm:ss"
+                styles={{
+                  input: {
+                    backgroundColor: 'var(--mantine-color-white)',
+                    border: '1px solid var(--mantine-color-gray-3)',
+                    borderRadius: '6px',
+                    padding: '8px 12px',
+                  },
+                  dropdown: {
+                    backgroundColor: 'var(--mantine-color-white)',
+                    border: '1px solid var(--mantine-color-gray-3)',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                    width: 'auto',
+                    minWidth: 'fit-content',
+                  },
+                  calendar: {
+                    width: 'auto',
+                    padding: '0.5rem',
+                    height: '280px',
+                    minHeight: '280px',
+                    maxHeight: '280px',
+                  },
+                  day: {
+                    color: isDarkMode ? '#e5e7eb' : undefined,
+                    '&:hover:not([data-outside]):not([data-disabled]):not([data-selected])': {
+                      backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
+                      color: `${isDarkMode ? '#f3f4f6' : '#374151'} !important`,
                     },
-                  });
-                  setShowOnlyMovingAverage(false); // Hide additional graph when new data is fetched
-                }
-              }}
-              disabled={!dateRange[0] || !dateRange[1]}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              {loading ? 'Loading...' : 'Apply'}
-            </button>
+                    '&[data-outside]': {
+                      color: isDarkMode ? '#6b7280' : '#4b5563',
+                      '&:hover': {
+                        backgroundColor: `${isDarkMode ? '#374151' : '#e5e7eb'} !important`,
+                        color: `${isDarkMode ? '#9ca3af' : '#374151'} !important`,
+                      },
+                    },
+                    '&[data-disabled]': {
+                      color: isDarkMode ? '#4b5563' : '#6b7280',
+                      '&:hover': {
+                        backgroundColor: `${isDarkMode ? '#374151' : '#e5e7eb'} !important`,
+                        color: `${isDarkMode ? '#6b7280' : '#4b5563'} !important`,
+                      },
+                    },
+                  },
+                  weekday: {
+                    color: isDarkMode ? '#d1d5db' : undefined,
+                  },
+                  calendarHeader: {
+                    color: isDarkMode ? '#f3f4f6' : undefined,
+                  },
+                  calendarHeaderControl: {
+                    color: isDarkMode ? '#e5e7eb' : undefined,
+                    '&:hover': {
+                      backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
+                      color: isDarkMode ? '#f3f4f6' : undefined,
+                    },
+                  },
+                  calendarHeaderLevel: {
+                    color: isDarkMode ? '#f3f4f6' : undefined,
+                    '&:hover': {
+                      backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
+                      color: isDarkMode ? '#ffffff' : undefined,
+                    },
+                  }
+                }}
+              />
+              <button
+                onClick={() => {
+                  if (dateRange[0] && dateRange[1]) {
+                    getWeatherData({
+                      variables: {
+                        collection: selectedCollection,
+                        limit: 10000,
+                        startDate: format(dateRange[0], 'yyyy-MM-dd HH:mm:ss'),
+                        endDate:   format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'),
+                      },
+                    });
+                    setShowOnlyMovingAverage(false); // Hide additional graph when new data is fetched
+                  }
+                }}
+                disabled={!dateRange[0] || !dateRange[1]}
+                className="mt-6 w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              >
+                {loading ? 'Loading...' : 'Apply Date Range'}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1330,9 +1269,6 @@ function VariableView() {
                   )}
                 </div>
               </div>
-
-              {/* Add Anomaly Color Legend after the chart */}
-              {anomalyDetection && <AnomalyColorLegend />}
 
               {/* Toggle Moving Average Graph Button */}
               {selectedVariables.length > 0 && (
