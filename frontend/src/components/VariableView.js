@@ -138,6 +138,13 @@ function VariableView() {
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
+  // Automatically reset showCorrelation to false when selectedVariables.length < 2
+  useEffect(() => {
+    if (selectedVariables.length < 2 && showCorrelation) {
+      setShowCorrelation(false);
+    }
+  }, [selectedVariables, showCorrelation]);
+
   // Toggle dark mode
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
