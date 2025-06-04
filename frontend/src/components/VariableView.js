@@ -1073,11 +1073,12 @@ function VariableView() {
                       backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
                       color: `${isDarkMode ? '#f3f4f6' : '#374151'} !important`,
                     },
-                    '&[data-outside]': {
-                      color: isDarkMode ? '#6b7280' : '#4b5563',
+                    // Remove custom styling for data-outside in dark mode to let CSS handle it
+                    '&[data-outside]': isDarkMode ? {} : {
+                      color: '#4b5563',
                       '&:hover': {
-                        backgroundColor: `${isDarkMode ? '#374151' : '#e5e7eb'} !important`,
-                        color: `${isDarkMode ? '#9ca3af' : '#374151'} !important`,
+                        backgroundColor: '#e5e7eb !important',
+                        color: '#374151 !important',
                       },
                     },
                     '&[data-disabled]': {

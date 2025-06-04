@@ -116,3 +116,59 @@ html.dark .mantine-DatePicker-decadeLevel {
 .dark [data-floating-ui-portal] * {
   color: #e5e7eb !important;
 }
+
+/* High specificity reset for weekend and outside date styling in dark mode */
+/* Target outside dates (previous/next month) - make them dimmed */
+html.dark [data-outside] {
+  color: #6b7280 !important;
+  opacity: 0.6 !important;
+}
+
+html.dark [data-outside]:hover {
+  background-color: #374151 !important;
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+/* Override component inline styles for outside dates */
+html.dark .mantine-DatePicker-day[data-outside] {
+  color: #6b7280 !important;
+  opacity: 0.6 !important;
+}
+
+html.dark .mantine-DatePicker-day[data-outside]:hover {
+  background-color: #374151 !important;
+  color: #9ca3af !important;
+  opacity: 1 !important;
+}
+
+/* Target weekend days - Saturday (6th column) and Sunday (7th column) */
+/* Targeting by table structure since we know Saturday and Sunday are columns 6 and 7 */
+html.dark table tr td:nth-child(6) > div,
+html.dark table tr td:nth-child(7) > div {
+  color: #f87171 !important;
+}
+
+html.dark table tr td:nth-child(6) > div:hover,
+html.dark table tr td:nth-child(7) > div:hover {
+  background-color: #374151 !important;
+  color: #fca5a5 !important;
+}
+
+/* More specific targeting with class names */
+html.dark .mantine-DatePicker-day:nth-of-type(6n),
+html.dark .mantine-DatePicker-day:nth-of-type(7n) {
+  color: #f87171 !important;
+}
+
+/* Ultimate override for any Mantine day element in weekend columns */
+html.dark [class*="mantine"] table tr td:nth-child(6) [class*="day"],
+html.dark [class*="mantine"] table tr td:nth-child(7) [class*="day"] {
+  color: #f87171 !important;
+}
+
+html.dark [class*="mantine"] table tr td:nth-child(6) [class*="day"]:hover,
+html.dark [class*="mantine"] table tr td:nth-child(7) [class*="day"]:hover {
+  background-color: #374151 !important;
+  color: #fca5a5 !important;
+}
