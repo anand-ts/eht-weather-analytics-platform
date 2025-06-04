@@ -902,7 +902,7 @@ function VariableView() {
       {/* Main Layout */}
       <div className="flex flex-col md:flex-row flex-1">
         {/* Sidebar */}
-        <div className="md:w-1/4 lg:w-1/5 bg-gray-100 dark:bg-gray-800 p-4 overflow-auto border-r border-gray-300 dark:border-gray-700 transition-colors duration-300">
+        <div className="w-full md:w-1/4 lg:w-1/5 bg-gray-100 dark:bg-gray-800 p-4 overflow-auto border-r border-gray-300 dark:border-gray-700 transition-colors duration-300">
           {/* Collection Selector */}
           <div className="mb-6">
             <h2 className="text-xl font-semibold mb-2">Select Collection</h2>
@@ -1037,7 +1037,7 @@ function VariableView() {
           {/* Date range picker */}
           <div className="mt-6">
             <h3 className="text-lg font-semibold mb-2">Select Date Range</h3>
-            <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div className="w-fit px-3 pt-3 pb-6 bg-gray-100 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
               <DatePicker
                 type="range"
                 value={dateRange}
@@ -1061,11 +1061,10 @@ function VariableView() {
                     minWidth: 'fit-content',
                   },
                   calendar: {
-                    width: 'auto',
-                    padding: '0.5rem',
-                    height: '280px',
-                    minHeight: '280px',
-                    maxHeight: '280px',
+                    width: 'fit-content',
+                    padding: '12px 12px 20px 12px',
+                    height: '300px',
+                    minHeight: '300px',
                   },
                   day: {
                     color: isDarkMode ? '#e5e7eb' : undefined,
@@ -1160,46 +1159,48 @@ function VariableView() {
                   }
                 }}
               />
-              <button
-                onClick={() => {
-                  if (dateRange[0] && dateRange[1]) {
-                    // Calculate dynamic limit based on date range
-                    const startTime = dateRange[0].getTime();
-                    const endTime = dateRange[1].getTime();
-                    const daysDiff = (endTime - startTime) / (1000 * 60 * 60 * 24);
-                    
-                    // Scale limit based on time span for better data distribution
-                    let dynamicLimit = 10000; // Default
-                    if (daysDiff > 365) {
-                      dynamicLimit = 25000; // 1+ years: more data points
-                    } else if (daysDiff > 180) {
-                      dynamicLimit = 20000; // 6+ months: increased limit
-                    } else if (daysDiff > 30) {
-                      dynamicLimit = 15000; // 1+ months: moderate increase
-                    }
-                    
-                    getWeatherData({
-                      variables: {
-                        collection: selectedCollection,
-                        limit: dynamicLimit,
-                        startDate: format(dateRange[0], 'yyyy-MM-dd HH:mm:ss'),
-                        endDate:   format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'),
-                      },
-                    });
-                    setShowOnlyMovingAverage(false); // Hide additional graph when new data is fetched
-                  }
-                }}
-                disabled={!dateRange[0] || !dateRange[1]}
-                className="mt-6 w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-              >
-                {loading ? 'Loading...' : 'Apply Date Range'}
-              </button>
             </div>
+            
+            {/* Apply Date Range Button - Moved outside calendar container */}
+            <button
+              onClick={() => {
+                if (dateRange[0] && dateRange[1]) {
+                  // Calculate dynamic limit based on date range
+                  const startTime = dateRange[0].getTime();
+                  const endTime = dateRange[1].getTime();
+                  const daysDiff = (endTime - startTime) / (1000 * 60 * 60 * 24);
+                  
+                  // Scale limit based on time span for better data distribution
+                  let dynamicLimit = 10000; // Default
+                  if (daysDiff > 365) {
+                    dynamicLimit = 25000; // 1+ years: more data points
+                  } else if (daysDiff > 180) {
+                    dynamicLimit = 20000; // 6+ months: increased limit
+                  } else if (daysDiff > 30) {
+                    dynamicLimit = 15000; // 1+ months: moderate increase
+                  }
+                  
+                  getWeatherData({
+                    variables: {
+                      collection: selectedCollection,
+                      limit: dynamicLimit,
+                      startDate: format(dateRange[0], 'yyyy-MM-dd HH:mm:ss'),
+                      endDate:   format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'),
+                    },
+                  });
+                  setShowOnlyMovingAverage(false); // Hide additional graph when new data is fetched
+                }
+              }}
+              disabled={!dateRange[0] || !dateRange[1]}
+              className="mt-6 w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-300 font-medium"
+            >
+              {loading ? 'Loading...' : 'Apply Date Range'}
+            </button>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="md:w-3/4 lg:w-4/5 p-6 overflow-auto">
+        <div className="w-full md:w-3/4 lg:w-4/5 p-6 overflow-auto">
           {selectedVariables.length > 0 ? (
             <>
               {/* Main Graph */}
