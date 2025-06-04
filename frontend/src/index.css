@@ -42,3 +42,77 @@ code {
   min-height: 100vh;
   @apply bg-white dark:bg-gray-900;
 }
+
+/* Mantine DatePicker dark mode fixes */
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsList {
+  color: #e5e7eb !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListControl {
+  color: #e5e7eb !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListControl:hover {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsList {
+  color: #e5e7eb !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListControl {
+  color: #e5e7eb !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListControl:hover {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthLevel {
+  color: #e5e7eb !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearLevel {
+  color: #e5e7eb !important;
+}
+
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-decadeLevel {
+  color: #e5e7eb !important;
+}
+
+/* More generic fallback for any missed Mantine DatePicker elements */
+html.dark .mantine-DatePicker-monthsList,
+html.dark .mantine-DatePicker-monthsListControl,
+html.dark .mantine-DatePicker-yearsList,
+html.dark .mantine-DatePicker-yearsListControl,
+html.dark .mantine-DatePicker-monthLevel,
+html.dark .mantine-DatePicker-yearLevel,
+html.dark .mantine-DatePicker-decadeLevel {
+  color: #e5e7eb !important;
+}
+
+/* Even more aggressive fallbacks */
+.dark .mantine-DatePicker-monthsList *,
+.dark .mantine-DatePicker-monthsListControl *,
+.dark .mantine-DatePicker-yearsList *,
+.dark .mantine-DatePicker-yearsListControl *,
+.dark .mantine-DatePicker-monthLevel *,
+.dark .mantine-DatePicker-yearLevel *,
+.dark .mantine-DatePicker-decadeLevel * {
+  color: #e5e7eb !important;
+}
+
+/* Target specific Mantine classes if they exist */
+.dark [class*="mantine-DatePicker"][class*="month"],
+.dark [class*="mantine-DatePicker"][class*="year"],
+.dark [class*="mantine-DatePicker"][class*="decade"] {
+  color: #e5e7eb !important;
+}
+
+/* Ultimate fallback for any DatePicker dropdown in dark mode */
+.dark [data-floating-ui-portal] [class*="mantine"],
+.dark [data-floating-ui-portal] * {
+  color: #e5e7eb !important;
+}

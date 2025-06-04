@@ -1107,11 +1107,48 @@ function VariableView() {
                     },
                   },
                   calendarHeaderLevel: {
-                    color: isDarkMode ? '#f3f4f6' : undefined,
+                    color: isDarkMode ? '#e5e7eb' : undefined,
                     '&:hover': {
                       backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
                       color: isDarkMode ? '#ffffff' : '#374151',
                     },
+                  },
+                  monthsList: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                  },
+                  monthsListControl: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                    '&:hover': {
+                      backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
+                      color: `${isDarkMode ? '#ffffff' : '#374151'} !important`,
+                    },
+                    '&[data-selected]': {
+                      backgroundColor: `${isDarkMode ? '#2563eb' : '#3b82f6'} !important`,
+                      color: '#ffffff !important',
+                    },
+                  },
+                  yearsList: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                  },
+                  yearsListControl: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                    '&:hover': {
+                      backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
+                      color: `${isDarkMode ? '#ffffff' : '#374151'} !important`,
+                    },
+                    '&[data-selected]': {
+                      backgroundColor: `${isDarkMode ? '#2563eb' : '#3b82f6'} !important`,
+                      color: '#ffffff !important',
+                    },
+                  },
+                  monthLevel: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                  },
+                  yearLevel: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                  },
+                  decadeLevel: {
+                    color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
                   }
                 }}
               />

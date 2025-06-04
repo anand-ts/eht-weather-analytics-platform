@@ -638,6 +638,119 @@ function TelescopeView() {
               clearable
               withTime
               valueFormat="YYYY-MM-DD HH:mm:ss"
+              styles={{
+                input: {
+                  backgroundColor: 'var(--mantine-color-white)',
+                  border: '1px solid var(--mantine-color-gray-3)',
+                  borderRadius: '6px',
+                  padding: '8px 12px',
+                },
+                dropdown: {
+                  backgroundColor: 'var(--mantine-color-white)',
+                  border: '1px solid var(--mantine-color-gray-3)',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  width: 'auto',
+                  minWidth: 'fit-content',
+                },
+                calendar: {
+                  width: 'auto',
+                  padding: '0.5rem',
+                  height: '280px',
+                  minHeight: '280px',
+                  maxHeight: '280px',
+                },
+                day: {
+                  color: isDarkMode ? '#e5e7eb' : undefined,
+                  '&:hover:not([data-outside]):not([data-disabled]):not([data-selected])': {
+                    backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
+                    color: `${isDarkMode ? '#f3f4f6' : '#374151'} !important`,
+                  },
+                  '&[data-outside]': {
+                    color: isDarkMode ? '#6b7280' : '#4b5563',
+                    '&:hover': {
+                      backgroundColor: `${isDarkMode ? '#374151' : '#e5e7eb'} !important`,
+                      color: `${isDarkMode ? '#9ca3af' : '#374151'} !important`,
+                    },
+                  },
+                  '&[data-disabled]': {
+                    color: isDarkMode ? '#4b5563' : '#6b7280',
+                    '&:hover': {
+                      backgroundColor: `${isDarkMode ? '#374151' : '#e5e7eb'} !important`,
+                      color: `${isDarkMode ? '#6b7280' : '#4b5563'} !important`,
+                    },
+                  },
+                  '&[data-selected]': {
+                    backgroundColor: `${isDarkMode ? '#2563eb' : '#3b82f6'} !important`,
+                    color: '#ffffff !important',
+                  },
+                  '&[data-in-range]': {
+                    backgroundColor: `${isDarkMode ? '#475569' : '#bfdbfe'} !important`,
+                    color: `${isDarkMode ? '#e2e8f0' : '#1e40af'} !important`,
+                  },
+                  '&[data-first-in-range], &[data-last-in-range]': {
+                    backgroundColor: `${isDarkMode ? '#1d4ed8' : '#3b82f6'} !important`,
+                    color: '#ffffff !important',
+                  },
+                },
+                weekday: {
+                  color: isDarkMode ? '#d1d5db' : undefined,
+                },
+                calendarHeader: {
+                  color: isDarkMode ? '#f3f4f6' : undefined,
+                },
+                calendarHeaderControl: {
+                  color: isDarkMode ? '#e5e7eb' : undefined,
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
+                    color: isDarkMode ? '#f3f4f6' : '#374151',
+                  },
+                },
+                calendarHeaderLevel: {
+                  color: isDarkMode ? '#f3f4f6' : undefined,
+                  '&:hover': {
+                    backgroundColor: isDarkMode ? '#4b5563' : '#f3f4f6',
+                    color: isDarkMode ? '#ffffff' : '#374151',
+                  },
+                },
+                monthsList: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                },
+                monthsListControl: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                  '&:hover': {
+                    backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
+                    color: `${isDarkMode ? '#ffffff' : '#374151'} !important`,
+                  },
+                  '&[data-selected]': {
+                    backgroundColor: `${isDarkMode ? '#2563eb' : '#3b82f6'} !important`,
+                    color: '#ffffff !important',
+                  },
+                },
+                yearsList: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                },
+                yearsListControl: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                  '&:hover': {
+                    backgroundColor: `${isDarkMode ? '#4b5563' : '#f3f4f6'} !important`,
+                    color: `${isDarkMode ? '#ffffff' : '#374151'} !important`,
+                  },
+                  '&[data-selected]': {
+                    backgroundColor: `${isDarkMode ? '#2563eb' : '#3b82f6'} !important`,
+                    color: '#ffffff !important',
+                  },
+                },
+                monthLevel: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                },
+                yearLevel: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                },
+                decadeLevel: {
+                  color: `${isDarkMode ? '#e5e7eb' : undefined} !important`,
+                }
+              }}
             />
             <button
               onClick={fetchTelescopeData}
