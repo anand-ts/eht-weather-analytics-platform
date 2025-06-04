@@ -185,10 +185,25 @@ function VariableView() {
     const isEndDateValid = dateRange[1] && isValidDateFormat(format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'));
 
     if (isStartDateValid && isEndDateValid && cachedData === null) {
+      // Calculate dynamic limit based on date range
+      const startTime = dateRange[0].getTime();
+      const endTime = dateRange[1].getTime();
+      const daysDiff = (endTime - startTime) / (1000 * 60 * 60 * 24);
+      
+      // Scale limit based on time span for better data distribution
+      let dynamicLimit = 10000; // Default
+      if (daysDiff > 365) {
+        dynamicLimit = 25000; // 1+ years: more data points
+      } else if (daysDiff > 180) {
+        dynamicLimit = 20000; // 6+ months: increased limit
+      } else if (daysDiff > 30) {
+        dynamicLimit = 15000; // 1+ months: moderate increase
+      }
+      
       getWeatherData({
         variables: {
           collection: selectedCollection,
-          limit: 10000,
+          limit: dynamicLimit,
           startDate: format(dateRange[0], 'yyyy-MM-dd HH:mm:ss'),
           endDate: format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'),
         }
@@ -1103,10 +1118,25 @@ function VariableView() {
               <button
                 onClick={() => {
                   if (dateRange[0] && dateRange[1]) {
+                    // Calculate dynamic limit based on date range
+                    const startTime = dateRange[0].getTime();
+                    const endTime = dateRange[1].getTime();
+                    const daysDiff = (endTime - startTime) / (1000 * 60 * 60 * 24);
+                    
+                    // Scale limit based on time span for better data distribution
+                    let dynamicLimit = 10000; // Default
+                    if (daysDiff > 365) {
+                      dynamicLimit = 25000; // 1+ years: more data points
+                    } else if (daysDiff > 180) {
+                      dynamicLimit = 20000; // 6+ months: increased limit
+                    } else if (daysDiff > 30) {
+                      dynamicLimit = 15000; // 1+ months: moderate increase
+                    }
+                    
                     getWeatherData({
                       variables: {
                         collection: selectedCollection,
-                        limit: 10000,
+                        limit: dynamicLimit,
                         startDate: format(dateRange[0], 'yyyy-MM-dd HH:mm:ss'),
                         endDate:   format(dateRange[1], 'yyyy-MM-dd HH:mm:ss'),
                       },

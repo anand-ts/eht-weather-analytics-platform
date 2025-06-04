@@ -179,8 +179,15 @@ const resolvers = {
           console.log(`[${requestId}] Executing chunked date range query...`);
           
           try {
-            // For smaller queries, try direct approach first
-            if (requestedLimit <= 100) {
+            // Calculate the time span to determine sampling strategy
+            const startTime = new Date(startDate);
+            const endTime = new Date(endDate);
+            const timeSpanDays = (endTime - startTime) / (1000 * 60 * 60 * 24);
+            
+            console.log(`[${requestId}] Time span: ${timeSpanDays.toFixed(1)} days`);
+            
+            // For smaller queries or short time spans, try direct approach first
+            if (requestedLimit <= 100 || timeSpanDays <= 7) {
               data = await WeatherModel.find({ 
                 wdatetime: { $gte: startDate, $lte: endDate } 
               })
@@ -192,31 +199,48 @@ const resolvers = {
               console.log(`[${requestId}] Found ${data.length} records with direct query`);
             }
             
-            // If direct query doesn't return enough data, try chunked approach
-            if (data.length < requestedLimit) {
+            // For larger time spans, use stratified sampling to ensure even distribution
+            if (data.length < requestedLimit && timeSpanDays > 7) {
               // Get chunked date ranges
-              const chunks = getDateChunks(startDate, endDate);
-              console.log(`[${requestId}] Using ${chunks.length} date chunks`);
+              const chunks = getDateChunks(startDate, endDate, Math.min(20, Math.ceil(timeSpanDays / 30))); // More chunks for longer periods
+              console.log(`[${requestId}] Using ${chunks.length} date chunks for stratified sampling`);
+              
+              // Calculate samples per chunk to ensure even distribution
+              const samplesPerChunk = Math.ceil(requestedLimit / chunks.length);
+              console.log(`[${requestId}] Target samples per chunk: ${samplesPerChunk}`);
               
               data = [];
-              // Process each chunk with a lower timeout
+              // Process each chunk and collect samples evenly
               for (const chunk of chunks) {
-                if (data.length >= requestedLimit) break;
-                
-                const remainingLimit = requestedLimit - data.length;
-                const chunkData = await WeatherModel.find({
-                  wdatetime: { $gte: chunk.start, $lte: chunk.end }
-                })
-                  .lean()
-                  .sort({ wdatetime: 1 })
-                  .limit(remainingLimit)
-                  .maxTimeMS(4000); // Shorter timeout per chunk
-                
-                console.log(`[${requestId}] Found ${chunkData.length} records in chunk ${chunk.start} to ${chunk.end}`);
-                data.push(...chunkData);
+                try {
+                  const chunkData = await WeatherModel.find({
+                    wdatetime: { $gte: chunk.start, $lte: chunk.end }
+                  })
+                    .lean()
+                    .sort({ wdatetime: 1 })
+                    .limit(samplesPerChunk)
+                    .maxTimeMS(4000); // Shorter timeout per chunk
+                  
+                  console.log(`[${requestId}] Found ${chunkData.length} records in chunk ${chunk.start} to ${chunk.end}`);
+                  data.push(...chunkData);
+                } catch (chunkErr) {
+                  console.warn(`[${requestId}] Chunk query failed for ${chunk.start} to ${chunk.end}:`, chunkErr.message);
+                  // Continue with other chunks even if one fails
+                }
               }
               
-              console.log(`[${requestId}] Found total of ${data.length} records with chunked approach`);
+              // If we have more data than requested, sample evenly across the timeline
+              if (data.length > requestedLimit) {
+                const step = Math.floor(data.length / requestedLimit);
+                const sampledData = [];
+                for (let i = 0; i < data.length && sampledData.length < requestedLimit; i += step) {
+                  sampledData.push(data[i]);
+                }
+                data = sampledData;
+                console.log(`[${requestId}] Sampled down to ${data.length} evenly distributed records`);
+              }
+              
+              console.log(`[${requestId}] Found total of ${data.length} records with stratified sampling`);
             }
           } catch (err) {
             console.error(`[${requestId}] Chunked query error:`, err.message);
