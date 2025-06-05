@@ -2,6 +2,8 @@
 
 This project provides a containerized weather data visualization application for telescope observatories, featuring a React frontend, Node.js GraphQL backend, and MongoDB database.
 
+![Weather Data Visualization](frontend/src/assets/prod-v1-0.png)
+
 ## 🏗️ Architecture
 
 - **Frontend**: React.js with Apollo Client, Chart.js, and Tailwind CSS (Port 3000)
