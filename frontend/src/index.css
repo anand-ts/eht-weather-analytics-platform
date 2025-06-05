@@ -52,9 +52,10 @@ html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListContr
   color: #e5e7eb !important;
 }
 
-html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListControl:hover {
+/* FIX ME */
+html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListControl:hover { 
   background-color: #4b5563 !important;
-  color: #ffffff !important;
+  color: #ff0000 !important;
 }
 
 html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsList {
@@ -65,9 +66,10 @@ html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListContro
   color: #e5e7eb !important;
 }
 
+/* FIX ME */
 html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListControl:hover {
   background-color: #4b5563 !important;
-  color: #ffffff !important;
+  color: #ff0000 !important;
 }
 
 html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthLevel {
@@ -171,4 +173,20 @@ html.dark [class*="mantine"] table tr td:nth-child(6) [class*="day"]:hover,
 html.dark [class*="mantine"] table tr td:nth-child(7) [class*="day"]:hover {
   background-color: #374151 !important;
   color: #fca5a5 !important;
+}
+
+/* Super aggressive targeting for month/year buttons */
+html.dark [data-picker-control="true"]:hover,
+html.dark [data-picker-control="true"]:hover *,
+html.dark button[class*="mantine-PickerControl-pickerControl"]:hover,
+html.dark button[class*="mantine-PickerControl-pickerControl"]:hover *,
+html.dark button[class*="mantine-DatePicker-pickerControl"]:hover,
+html.dark button[class*="mantine-DatePicker-pickerControl"]:hover *,
+html.dark button.mantine-1hcjx8j:hover,
+html.dark button.mantine-1hcjx8j:hover * {
+  background-color: #4b5563 !important;
+  color: #e5e7eb !important;
+  fill: #e5e7eb !important;
+  stroke: #e5e7eb !important;
+  text-shadow: none !important;
 }
