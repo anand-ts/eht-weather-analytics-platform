@@ -9,15 +9,18 @@ First, install Homebrew via Terminal:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Then install Docker:
+Then install Git and Docker:
 ```bash
+brew install git
 brew install --cask docker
 ```
+
+Start Docker Desktop from Applications after installation.
 
 **Alternative:** Install [Docker](https://docs.docker.com/get-docker/) directly from the official website
 
 
-### Step 2: Setup
+### Step 2: Clone Repository
 ```bash
 # Clone the repository
 git clone https://github.gatech.edu/Xtreme-Astrophysics/data_stream.git
@@ -25,8 +28,8 @@ git clone https://github.gatech.edu/Xtreme-Astrophysics/data_stream.git
 # Navigate to the project
 cd data_stream
 
-# Run the automated setup
-./setup.sh
+# Make shell scripts executable
+chmod +x *.sh
 ```
 
 ### Step 3: Add Your Data
@@ -40,15 +43,23 @@ data/
 ├── apex_2006_2023.csv
 ├── glt_2017_2022.csv
 ├── kittpeak_2019_2024.csv
-└── sma_2006_2023.csv
+├── sma_2006_2023.csv
+└── ...
 ```
 
-### Step 4: Import Data
+### Step 4: Build and Start Application
 ```bash
-./import-data.sh
+# Run the automated setup (builds Docker containers, starts services, and imports data)
+./setup.sh
 ```
 
-**Note:** This process imports millions of weather data records and takes a few minutes to complete.
+**This script will:** 
+- Build and start all Docker containers
+- Wait for all services to be ready  
+- Offer to import your CSV data automatically
+- Takes a few minutes to complete
+
+Everything is done automatically.
 
 ### Step 5: Access the Application
 - **Frontend**: http://localhost:3000
@@ -56,17 +67,21 @@ data/
 
 ## That's it! 📡
 
-Your weather data visualization app is now running with your data loaded.
+The application is now running with the data loaded! Woo!
 
-## Quick Commands
+## For Future Use
+
+**IMPORTANT:** After the initial setup, you can use these simpler commands:
 
 ```bash
-make up          # Start services
+make up          # Start services (quick restart)
+make down        # Stop services  
 make health      # Check status
 make logs        # View logs
-make down        # Stop services
-make help        # See all commands
 ```
+
+**First time only:** Use `./setup.sh` (builds everything from scratch)  
+**Future starts:** Use `make up` and `make down` (much faster)
 
 Run `make health` to check if all services are running properly.
 
@@ -87,3 +102,4 @@ Your CSV files should have these columns:
 ## Troubleshooting
 - Check the full [README.md](README.md)
 - Run `./health-check.sh` to diagnose issues
+- Or contact me :)
