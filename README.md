@@ -202,14 +202,3 @@ docker cp ./mongodb_backup data_stream_mongodb:/data/restore
 docker exec data_stream_mongodb mongorestore --db data_stream /data/restore/data_stream
 ```
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with Docker
-5. Submit a pull request
-
-## 📝 License
-
-This project is licensed under the ISC License.
