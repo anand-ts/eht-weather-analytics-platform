@@ -1,206 +1,107 @@
-# Weather Data Visualization - Docker Setup
+# EHT Weather Analytics Platform 🛰️
 
-This project provides a containerized weather data visualization application for telescope observatories, featuring a React frontend, Node.js GraphQL backend, and MongoDB database.
+![Demo Light Mode](frontend/src/assets/demo-light.png)
 
-![Weather Data Visualization](frontend/src/assets/prod-v1-0.png)
+### Step 1: Prerequisites
 
-## 🏗️ Architecture
+**Recommended Installation via Homebrew (macOS):**
 
-- **Frontend**: React.js with Apollo Client, Chart.js, and Tailwind CSS (Port 3000)
-- **Backend**: Node.js Express with Apollo Server GraphQL (Port 4000)
-- **Database**: MongoDB (Port 27017)
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Docker and Docker Compose installed on your system
-- CSV data files for telescope weather data
-
-### 1. Clone and Setup
-
+First, install Homebrew via Terminal:
 ```bash
-git clone <your-repo-url>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Then install Git and Docker:
+```bash
+brew install git
+brew install --cask docker
+```
+
+Start Docker Desktop from Applications after installation.
+
+**Alternative:** Install [Docker](https://docs.docker.com/get-docker/) directly from the official website
+
+
+### Step 2: Clone Repository
+```bash
+# Clone the repository
+git clone https://github.gatech.edu/Xtreme-Astrophysics/data_stream.git
+
+# Navigate to the project
 cd data_stream
+
+# Make shell scripts executable
+chmod +x *.sh
 ```
 
-### 2. Prepare Your CSV Data
+### Step 3: Add Your Data
 
-Create a `data` directory in the project root (if it doesn't exist) and place your CSV files there:
+Download the data from Dropbox:
+**[Download Weather Data](https://www.dropbox.com/scl/fo/pqxir3n4cbmrgagihh1cb/AKM2OKaeNR6SuEMaZE5puM4?rlkey=lk7uml44wmqa6r0ts1anttcsf&st=ipybe69n&dl=0)**
 
+Extract and place your CSV files in the `data/` directory:
 ```
-data_stream/
-├── data/
-│   ├── apex_2006_2023.csv
-│   ├── glt_2017_2022.csv
-│   ├── kittpeak_2019_2024.csv
-│   └── sma_2006_2023.csv
-├── docker-compose.yml
-├── frontend/
-├── backend/
-└── README.md
+data/
+├── apex_2006_2023.csv
+├── glt_2017_2022.csv
+├── kittpeak_2019_2024.csv
+├── sma_2006_2023.csv
+└── ...
 ```
 
-**Important**: Your CSV files should have these columns:
-- `wdatetime` (datetime string)
-- `temperature_k` (temperature in Kelvin)
-- `dewpoint_k` (dew point in Kelvin)
-- `pressure_kpa` (pressure in kPa)
-- `relhumidity_pct` (relative humidity percentage)
-- `winddir_deg` (wind direction in degrees)
-- `windspeed_mps` (wind speed in m/s)
-- `pwv_mm` (precipitable water vapor in mm)
-- `phaserms_deg` (phase RMS in degrees)
-- `tau183ghz`, `tau215ghz`, `tau225ghz` (tau values)
-
-### 3. Start the Application
-
+### Step 4: Build and Start Application
 ```bash
-docker-compose up --build
+# Run the automated setup (builds Docker containers, starts services, and imports data)
+./setup.sh
 ```
 
-This will:
-- Build and start MongoDB container
-- Build and start the backend container
-- Build and start the frontend container
+**This script will:** 
+- Build and start all Docker containers
+- Wait for all services to be ready  
+- Offer to import your CSV data automatically
+- Takes a few minutes to complete
 
-### 4. Import CSV Data to MongoDB
+Everything is done automatically.
 
-Once the containers are running, you need to import your CSV data into MongoDB:
-
-```bash
-# Access the MongoDB container
-docker exec -it data_stream_mongodb bash
-
-# Import each CSV file (replace filenames as needed)
-mongoimport --db data_stream --collection apex_2006_2023 --type csv --file /data/import/apex_2006_2023.csv --headerline
-
-mongoimport --db data_stream --collection glt_2017_2022 --type csv --file /data/import/glt_2017_2022.csv --headerline
-
-mongoimport --db data_stream --collection kittpeak_2019_2024 --type csv --file /data/import/kittpeak_2019_2024.csv --headerline
-
-mongoimport --db data_stream --collection sma_2006_2023 --type csv --file /data/import/sma_2006_2023.csv --headerline
-
-# Exit the container
-exit
-```
-
-### 5. Access the Application
-
+### Step 5: Access the Application
 - **Frontend**: http://localhost:3000
-- **Backend GraphQL Playground**: http://localhost:4000/graphql
-- **MongoDB**: localhost:27017
+- **Backend**: http://localhost:4000/graphql
 
-## 🗂️ Project Structure
+## That's it! 📡
 
-```
-data_stream/
-├── frontend/                 # React frontend application
-│   ├── src/
-│   │   ├── components/      # React components
-│   │   ├── assets/          # Images and static files
-│   │   └── queries.js       # GraphQL queries
-│   ├── public/              # Public assets
-│   ├── Dockerfile          # Frontend container definition
-│   └── package.json        # Frontend dependencies
-├── backend/                 # Node.js backend application
-│   ├── server.js           # Main server file with GraphQL setup
-│   ├── Dockerfile          # Backend container definition
-│   └── package.json        # Backend dependencies
-├── data/                   # CSV data files for import
-├── docker-compose.yml      # Docker services orchestration
-└── README.md              # This file
-```
+The application is now running with the data loaded! Woo!
 
-## 🔧 Development
+## For Future Use
 
-### Running Individual Services
-
-If you want to run services individually for development:
+**IMPORTANT:** After the initial setup, you can use these simpler commands:
 
 ```bash
-# Start only MongoDB
-docker-compose up mongodb
-
-# Start backend (requires MongoDB)
-cd backend && npm install && npm start
-
-# Start frontend (requires backend)
-cd frontend && npm install && npm start
+make up          # Start services (quick restart)
+make down        # Stop services  
+make health      # Check status
+make logs        # View logs
 ```
 
-### Adding New Data Collections
+**First time only:** Use `./setup.sh` (builds everything from scratch)  
+**Future starts:** Use `make up` and `make down` (much faster)
 
-1. Place your CSV file in the `data/` directory
-2. Import it using mongoimport (see step 4 above)
-3. Update the `weatherModelMap` in `backend/server.js` to include your new collection
-4. Update the GraphQL enum `CollectionName` in the backend
+Run `make health` to check if all services are running properly.
 
-### Customizing Data Import
+## CSV Data Format Required
 
-The CSV import process expects specific column names. If your CSV has different column names, you can either:
-1. Rename the columns in your CSV to match the expected format
-2. Modify the Mongoose schema in `backend/server.js`
+Your CSV files should have these columns:
+- `wdatetime` - Date/time string
+- `temperature_k` - Temperature in Kelvin
+- `dewpoint_k` - Dew point in Kelvin
+- `pressure_kpa` - Pressure in kPa
+- `relhumidity_pct` - Relative humidity %
+- `winddir_deg` - Wind direction in degrees
+- `windspeed_mps` - Wind speed in m/s
+- `pwv_mm` - Precipitable water vapor in mm
+- `phaserms_deg` - Phase RMS in degrees
+- `tau183ghz`, `tau215ghz`, `tau225ghz` - Tau values
 
-## 🛠️ Troubleshooting
-
-### Common Issues
-
-1. **Port conflicts**: If ports 3000, 4000, or 27017 are in use, modify the ports in `docker-compose.yml`
-
-2. **Data not showing**: Ensure you've imported the CSV data using mongoimport
-
-3. **Frontend can't connect to backend**: Check that all containers are running with `docker-compose ps`
-
-4. **MongoDB connection issues**: Restart the containers with `docker-compose restart`
-
-### Viewing Logs
-
-```bash
-# View all logs
-docker-compose logs
-
-# View specific service logs
-docker-compose logs backend
-docker-compose logs frontend
-docker-compose logs mongodb
-```
-
-### Stopping the Application
-
-```bash
-# Stop all services
-docker-compose down
-
-# Stop and remove volumes (WARNING: This will delete your database data)
-docker-compose down -v
-```
-
-## 📊 Using the Application
-
-1. **Home Screen**: Choose between Variable View or Telescope View
-2. **Variable View**: Select multiple weather variables to compare across time
-3. **Telescope View**: Compare the same variable across different telescopes
-4. **Features**: 
-   - Interactive charts with zoom and pan
-   - Date range filtering
-   - Moving averages
-   - Data export (PNG/CSV)
-   - Dark/light mode toggle
-
-## 🔄 Data Management
-
-### Backup Data
-Your MongoDB data is stored in a Docker volume. To backup:
-
-```bash
-docker exec data_stream_mongodb mongodump --db data_stream --out /data/backup
-docker cp data_stream_mongodb:/data/backup ./mongodb_backup
-```
-
-### Restore Data
-```bash
-docker cp ./mongodb_backup data_stream_mongodb:/data/restore
-docker exec data_stream_mongodb mongorestore --db data_stream /data/restore/data_stream
-```
-
+## Troubleshooting
+- Check the full [README.md](README.md)
+- Run `./health-check.sh` to diagnose issues
+- Or contact me :)

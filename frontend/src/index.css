@@ -53,10 +53,10 @@ html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListContr
 }
 
 /* FIX ME */
-html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListControl:hover { 
+/* html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthsListControl:hover { 
   background-color: #4b5563 !important;
   color: #ff0000 !important;
-}
+} */
 
 html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsList {
   color: #e5e7eb !important;
@@ -67,10 +67,10 @@ html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListContro
 }
 
 /* FIX ME */
-html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListControl:hover {
+/* html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-yearsListControl:hover {
   background-color: #4b5563 !important;
   color: #ff0000 !important;
-}
+} */
 
 html.dark [data-mantine-color-scheme="dark"] .mantine-DatePicker-monthLevel {
   color: #e5e7eb !important;
@@ -190,3 +190,36 @@ html.dark button.mantine-1hcjx8j:hover * {
   stroke: #e5e7eb !important;
   text-shadow: none !important;
 }
+
+/* Light mode fixes for DatePicker hover effects */
+
+/* General date cells hover effect in light mode */
+[data-mantine-color-scheme="light"] .mantine-DatePicker-day:hover,
+html:not(.dark) .mantine-DatePicker-day:hover {
+  background-color: #e5e7eb !important; /* Gray-200 - more noticeable than default */
+  color: #111827 !important; /* Near black for contrast */
+}
+
+/* Month/year/decade picker controls in light mode */
+[data-mantine-color-scheme="light"] [data-picker-control="true"]:hover,
+[data-mantine-color-scheme="light"] [data-picker-control="true"]:hover *,
+[data-mantine-color-scheme="light"] button[class*="mantine-PickerControl-pickerControl"]:hover,
+[data-mantine-color-scheme="light"] button[class*="mantine-PickerControl-pickerControl"]:hover *,
+[data-mantine-color-scheme="light"] button[class*="mantine-DatePicker-pickerControl"]:hover,
+[data-mantine-color-scheme="light"] button[class*="mantine-DatePicker-pickerControl"]:hover *,
+html:not(.dark) [data-picker-control="true"]:hover,
+html:not(.dark) button[class*="mantine-PickerControl-pickerControl"]:hover,
+html:not(.dark) button[class*="mantine-DatePicker-pickerControl"]:hover {
+  background-color: #e5e7eb !important; /* Gray-200 */
+  color: #111827 !important; /* Near black */
+}
+
+/* Calendar header controls in light mode */
+[data-mantine-color-scheme="light"] .mantine-DatePicker-calendarHeaderControl:hover,
+[data-mantine-color-scheme="light"] .mantine-DatePicker-calendarHeaderLevel:hover,
+html:not(.dark) .mantine-DatePicker-calendarHeaderControl:hover,
+html:not(.dark) .mantine-DatePicker-calendarHeaderLevel:hover {
+  background-color: #e5e7eb !important;
+  color: #111827 !important;
+}
+
