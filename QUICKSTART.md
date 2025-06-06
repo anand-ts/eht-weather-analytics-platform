@@ -1,4 +1,6 @@
-# Quick Start Guide 🛰️
+# EHT Weather Analytics Platform 🛰️
+
+![Demo Light Mode](frontend/src/assets/demo-light.png)
 
 ### Step 1: Prerequisites
 
@@ -36,6 +38,12 @@ chmod +x *.sh
 
 Download the data from Dropbox:
 **[Download Weather Data](https://www.dropbox.com/scl/fo/pqxir3n4cbmrgagihh1cb/AKM2OKaeNR6SuEMaZE5puM4?rlkey=lk7uml44wmqa6r0ts1anttcsf&st=ipybe69n&dl=0)**
+
+Create the data directory and place your CSV files there:
+```bash
+# Create the data directory
+mkdir -p data
+```
 
 Extract and place your CSV files in the `data/` directory:
 ```
