@@ -3,9 +3,7 @@
 A web-based platform for visualizing and analyzing weather data from multiple telescope sites of the [Event Horizon Telescope](https://en.wikipedia.org/wiki/Event_Horizon_Telescope) (EHT). Easily compare, explore, and analyze weather parameters (temperature, humidity, wind, etc.) across observatories and time ranges.
 
 <div align="center">
-  <video src="frontend/src/assets/data_stream_new.mp4" autoplay loop muted playsinline width="100%">
-    Your browser does not support the video tag.
-  </video>
+  <img src="frontend/src/assets/datastream_new.gif" alt="Demo">
   <p><em>Demo</em></p>
 </div>
 
