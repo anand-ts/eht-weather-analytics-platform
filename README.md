@@ -1,6 +1,10 @@
 # EHT Weather Analytics Platform
 
-![Demo Light Mode](frontend/src/assets/demo-light.png)
+<div align="center">
+  <video src="frontend/src/assets/demo-web.mp4" autoplay loop muted playsinline width="100%">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 ### Step 1: Prerequisites
 
