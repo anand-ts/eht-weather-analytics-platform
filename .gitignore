@@ -1,0 +1,13 @@
+.gitignore
+node_modules
+.DS_Store
+.venv
+data
+tech_stack.md
+tasks.md
+docker_setup.md
+local_data_setup.md
+funding_proposal.md
+out
+README-personal.md
+readme-notes.md
