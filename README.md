@@ -1,117 +1,41 @@
 # EHT Weather Analytics Platform
 
+A web-based platform for visualizing and analyzing weather data from multiple telescope sites of the [Event Horizon Telescope](https://en.wikipedia.org/wiki/Event_Horizon_Telescope) (EHT). Easily compare, explore, and analyze weather parameters (temperature, humidity, wind, etc.) across observatories and time ranges.
+
 <div align="center">
-  <video src="frontend/src/assets/demo-web.mp4" autoplay loop muted playsinline width="100%">
+  <video src="frontend/src/assets/data_stream_new.mp4" autoplay loop muted playsinline width="100%">
     Your browser does not support the video tag.
   </video>
+  <p><em>Demo</em></p>
 </div>
 
-### Step 1: Prerequisites
+## Tech Stack
+- **Frontend:** React, Tailwind CSS, Apollo Client, Chart.js
+- **Backend:** Node.js, Express, Apollo Server (GraphQL), Mongoose
+- **Database:** MongoDB 
+- **Containerization:** Docker, Docker Compose
+- **Automation:** Makefile, Shell scripts
 
-**Recommended Installation via Homebrew (macOS):**
+## Quickstart
+See [QUICKSTART.md](QUICKSTART.md) for a step-by-step setup guide.
 
-First, install Homebrew via Terminal:
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+1. Install Docker & Git
+2. Clone the repo and add your CSV data to the `data/` folder
+3. Run `./setup.sh` to build and start everything
+4. Access the app at http://localhost:3000
 
-Then install Git and Docker:
-```bash
-brew install git
-brew install --cask docker
-```
+---
 
-Start Docker Desktop from Applications after installation.
+<div align="center">
+  <img src="frontend/src/assets/demo-light.png" alt="Demo Light Mode">
+  <p><em>Light Mode</em></p>
+</div>
 
-**Alternative:** Install [Docker](https://docs.docker.com/get-docker/) directly from the official website
+<div align="center">
+  <img src="frontend/src/assets/demo-dark.png" alt="Demo Dark Mode">
+  <p><em>Dark Mode</em></p>
+</div>
 
+---
 
-### Step 2: Clone Repository
-```bash
-# Clone the repository
-git clone https://github.gatech.edu/Xtreme-Astrophysics/data_stream.git
-
-# Navigate to the project
-cd data_stream
-
-# Make shell scripts executable
-chmod +x *.sh
-```
-
-### Step 3: Add Your Data
-
-Download the data from Dropbox:
-**[Download Weather Data](https://www.dropbox.com/scl/fo/pqxir3n4cbmrgagihh1cb/AKM2OKaeNR6SuEMaZE5puM4?rlkey=lk7uml44wmqa6r0ts1anttcsf&st=ipybe69n&dl=0)**
-
-Create the data directory and place your CSV files there:
-```bash
-# Create the data directory
-mkdir -p data
-```
-
-Extract and place your CSV files in the `data/` directory:
-```
-data/
-├── apex_2006_2023.csv
-├── glt_2017_2022.csv
-├── kittpeak_2019_2024.csv
-├── sma_2006_2023.csv
-└── ...
-```
-
-### Step 4: Build and Start Application
-```bash
-# Run the automated setup (builds Docker containers, starts services, and imports data)
-./setup.sh
-```
-
-**This script will:** 
-- Build and start all Docker containers
-- Wait for all services to be ready  
-- Offer to import your CSV data automatically
-- Takes a few minutes to complete
-
-Everything is done automatically.
-
-### Step 5: Access the Application
-- **Frontend**: http://localhost:3000
-- **Backend**: http://localhost:4000/graphql
-
-## That's it!
-
-The application is now running with the data loaded! Woo!
-
-## For Future Use
-
-**IMPORTANT:** After the initial setup, you can use these simpler commands:
-
-```bash
-make up          # Start services (quick restart)
-make down        # Stop services  
-make health      # Check status
-make logs        # View logs
-```
-
-**First time only:** Use `./setup.sh` (builds everything from scratch)  
-**Future starts:** Use `make up` and `make down` (much faster)
-
-Run `make health` to check if all services are running properly.
-
-## CSV Data Format Required
-
-Your CSV files should have these columns:
-- `wdatetime` - Date/time string
-- `temperature_k` - Temperature in Kelvin
-- `dewpoint_k` - Dew point in Kelvin
-- `pressure_kpa` - Pressure in kPa
-- `relhumidity_pct` - Relative humidity %
-- `winddir_deg` - Wind direction in degrees
-- `windspeed_mps` - Wind speed in m/s
-- `pwv_mm` - Precipitable water vapor in mm
-- `phaserms_deg` - Phase RMS in degrees
-- `tau183ghz`, `tau215ghz`, `tau225ghz` - Tau values
-
-## Troubleshooting
-- Check the full [README.md](README.md)
-- Run `./health-check.sh` to diagnose issues
-- Or contact me :)
+> Georgia Tech - School of Physics (Black Hole Astrophysics Group)
