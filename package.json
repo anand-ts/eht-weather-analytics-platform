@@ -7,6 +7,9 @@
     "start": "cd backend && node server.js",
     "backend": "cd backend && node server.js",
     "frontend": "cd frontend && npm start",
+    "dev": "./scripts/start-dev.sh",
+    "stop": "./scripts/stop-dev.sh",
+    "status": "./scripts/status.sh",
     "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -27,6 +30,7 @@
     "react-router-dom": "^7.4.0"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "nodemon": "^3.1.4"
   }
 }

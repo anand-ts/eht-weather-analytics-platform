@@ -1,4 +1,4 @@
-# EHT Weather Analytics Platform 🛰️
+# EHT Weather Analytics Platform
 
 ![Demo Light Mode](frontend/src/assets/demo-light.png)
 
@@ -73,7 +73,7 @@ Everything is done automatically.
 - **Frontend**: http://localhost:3000
 - **Backend**: http://localhost:4000/graphql
 
-## That's it! 📡
+## That's it!
 
 The application is now running with the data loaded! Woo!
 
